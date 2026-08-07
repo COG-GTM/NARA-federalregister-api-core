@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe RegulationsDotGov::V4::Client do
+  before(:each) do
+    allow_any_instance_of(RegulationsDotGov::V4::Client).to receive(:api_key).and_return(Rails.application.credentials.dig(:regulations_dot_gov, :v4_api_key) || 'TEST_KEY')
+  end
   let(:common_attributes) do
     {
       document_id:                      'FRTIB_FRDOC_0001-0319',
