@@ -33,12 +33,10 @@
 
       return support && {
         end: (function () {
-          var transitionEnd = "TransitionEnd"
-          if ( $.browser.webkit ) {
+          var transitionEnd = "transitionend"
+          if ( thisStyle.transition === undefined && thisStyle.WebkitTransition !== undefined ) {
           	transitionEnd = "webkitTransitionEnd"
-          } else if ( $.browser.mozilla ) {
-          	transitionEnd = "transitionend"
-          } else if ( $.browser.opera ) {
+          } else if ( thisStyle.transition === undefined && thisStyle.OTransition !== undefined ) {
           	transitionEnd = "oTransitionEnd"
           }
           return transitionEnd
