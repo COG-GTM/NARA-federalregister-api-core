@@ -153,10 +153,9 @@
   , listen: function () {
       this.$element
         .on('blur',     $.proxy(this.blur, this))
+        .on('keydown',  $.proxy(this.keydown, this))
         .on('keypress', $.proxy(this.keypress, this))
         .on('keyup',    $.proxy(this.keyup, this))
-
-      this.$element.on('keydown', $.proxy(this.keypress, this))
 
       this.$menu
         .on('click', $.proxy(this.click, this))
@@ -188,7 +187,7 @@
       e.preventDefault()
   }
 
-  , keypress: function (e) {
+  , move: function (e) {
       if (!this.shown) return
 
       switch(e.keyCode) {
@@ -210,6 +209,16 @@
       }
 
       e.stopPropagation()
+    }
+
+  , keydown: function (e) {
+      this.suppressKeyPressRepeat = ~$.inArray(e.keyCode, [40,38,9,13,27])
+      this.move(e)
+    }
+
+  , keypress: function (e) {
+      if (this.suppressKeyPressRepeat) return
+      this.move(e)
     }
 
   , blur: function (e) {

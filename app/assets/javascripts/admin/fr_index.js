@@ -175,9 +175,9 @@ var FRIndexEditor = (function(){
       },
 
       add_edit_context_highlight: function() {
-        this.edit_buttons.off('hover');
+        this.edit_buttons.off('mouseenter mouseleave');
 
-        this.edit_buttons.on('hover', function(event) {
+        this.edit_buttons.on('mouseenter mouseleave', function(event) {
           var context_wrapper = $(this).closest('li');
 
           if( event.type === 'mouseleave' ) {
