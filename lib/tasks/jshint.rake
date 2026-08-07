@@ -20,7 +20,6 @@ namespace :jshint do
       admin/jquery.Jcrop.js
       admin/jquery.tablesorter.js
       admin/jquery-1.7.2.min.js
-      admin/jquery-1.8.3.min.js
       page_specific/iscroll.js
       jquery-ui-1.8.6.custom.min.js
       vendor.js

@@ -175,9 +175,9 @@ var FRIndexEditor = (function(){
       },
 
       add_edit_context_highlight: function() {
-        this.edit_buttons.off('hover');
+        this.edit_buttons.off('mouseenter mouseleave');
 
-        this.edit_buttons.on('hover', function(event) {
+        this.edit_buttons.on('mouseenter mouseleave', function(event) {
           var context_wrapper = $(this).closest('li');
 
           if( event.type === 'mouseleave' ) {
@@ -292,10 +292,10 @@ var FRIndexEditor = (function(){
         if ( ! wrapping_context.hasClass('top_level') ) {
           var context_siblings = wrapping_context.siblings('li');
 
-          if (context_siblings.size() === 0) {
+          if (context_siblings.length === 0) {
             wrapping_context.closest('li.top_level').remove();
           }
-          else if (context_siblings.size() === 1) {
+          else if (context_siblings.length === 1) {
             wrapping_context.closest('li.top_level').children('.edit').remove();
             wrapping_context.remove();
           }

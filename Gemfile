@@ -81,7 +81,7 @@ gem 'combine_pdf'
 gem 'will_paginate-bootstrap', '0.2.5'
 gem 'authlogic'
 gem 'bootsnap'
-gem 'jquery-rails'
+gem 'jquery-rails', '>= 4.4.0'
 
 gem 'elasticsearch-persistence', '~> 7.0'
 # Used by SornXmlParser for extracting SORN details

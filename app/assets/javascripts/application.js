@@ -1,4 +1,5 @@
-//= require admin/jquery-1.8.3.min.js
+//= require jquery3
+//= require jquery-migrate-3.5.2.min.js
 //= require jquery_ujs
 //= require jquery-ui-1.9.2.custom.min.js
 //= require jquery-ui-1.9.2.effects.min.js
