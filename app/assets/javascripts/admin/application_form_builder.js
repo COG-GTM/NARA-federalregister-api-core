@@ -45,7 +45,7 @@ $(function() {
       }
     });
 
-    parent_li.find(".selected li").live("click", function() {
+    parent_li.on("click", ".selected li", function() {
       $(this).remove();
     });
   });

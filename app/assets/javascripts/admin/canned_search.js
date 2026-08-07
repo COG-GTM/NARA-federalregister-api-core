@@ -3,7 +3,7 @@ $(document).ready(function() {
     $("#canned_searches tbody.active_canned_searches").sortable({
       stop: function(event, ui) {
         var canned_search_id = ui.item.attr('data-canned-search-id');
-        var position = ui.item.prevAll('tr').size() + 1;
+        var position = ui.item.prevAll('tr').length + 1;
         $.ajax({
           url: '/admin/canned_searches/' + canned_search_id,
           type: 'PUT',

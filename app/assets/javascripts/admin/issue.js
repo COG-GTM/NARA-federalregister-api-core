@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  $('input[type=checkbox]').live('click', function(){
+  $(document).on('click', 'input[type=checkbox]', function(){
     // $(this)
     var form = $($(this).closest('form'));
     form.find('img').remove();
