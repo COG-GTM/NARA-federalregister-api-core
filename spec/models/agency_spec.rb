@@ -50,8 +50,10 @@ describe Agency do
 
   describe "#pai_compilation_url" do
     it "adds an '-interim' suffix if the latest year is the interim year" do
-      agency = Agency.new(pai_year: 2025, pai_identifier: "SSA")
-      expect(agency.pai_compilation_url).to eq("https://www.govinfo.gov/content/pkg/PAI-2025-SSA-interim/xml/PAI-2025-SSA-interim.xml")
+      Timecop.freeze(Date.new(2025, 6, 1)) do
+        agency = Agency.new(pai_year: 2025, pai_identifier: "SSA")
+        expect(agency.pai_compilation_url).to eq("https://www.govinfo.gov/content/pkg/PAI-2025-SSA-interim/xml/PAI-2025-SSA-interim.xml")
+      end
     end
 
     it "links 2007 post URLs to XML links" do
