@@ -3,12 +3,11 @@ class Api::V1::AgenciesController < ApiController
     respond_to do |wants|
       wants.json do
         agencies = Agency.all
-        cache_key = ["api/v1/agencies", agencies.cache_key_with_version, request.base_url, specified_fields]
-        json = Rails.cache.fetch(cache_key, expires_in: 1.day) do
-          data = agencies.includes(:children).order("name").map do |agency|
-            basic_agency_data(agency).merge(:json_url => api_v1_agency_url(agency.id, :format => :json))
-          end
-          ActiveSupport::JSON.encode(data)
+        json = if params[:fields]
+          agencies_index_json(agencies)
+        else
+          cache_key = ["api/v1/agencies", agencies.cache_key_with_version, request.base_url]
+          Rails.cache.fetch(cache_key, expires_in: 1.day) { agencies_index_json(agencies) }
         end
 
         cache_for 1.day
@@ -58,6 +57,13 @@ class Api::V1::AgenciesController < ApiController
   end
 
   private
+
+  def agencies_index_json(agencies)
+    data = agencies.includes(:children).order("name").map do |agency|
+      basic_agency_data(agency).merge(:json_url => api_v1_agency_url(agency.id, :format => :json))
+    end
+    ActiveSupport::JSON.encode(data)
+  end
 
   def basic_agency_data(agency)
     representation = AgencyApiRepresentation.new(agency)
