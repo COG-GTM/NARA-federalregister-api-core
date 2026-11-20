@@ -18,19 +18,32 @@ RSpec.describe "Agencies Endpoint", :type => :request do
     expect(data.last["child_slugs"]).to eq(["child-agency"])
   end
 
-  it "serves the same body from cache and reflects agency changes" do
-    get '/api/v1/agencies.json'
-    first_body = response.body
+  it "builds the default listing once and serves repeats from cache" do
+    expect(AgencyApiRepresentation).to receive(:new).twice.and_call_original
 
     get '/api/v1/agencies.json'
+    first_body = response.body
+    get '/api/v1/agencies.json'
+
     expect(response.body).to eq(first_body)
+  end
+
+  it "reflects agency changes after the listing is cached" do
+    get '/api/v1/agencies.json'
 
     Agency.find_by_slug("child-agency").update!(name: "Renamed Agency", updated_at: 1.minute.from_now)
     get '/api/v1/agencies.json'
+
     expect(JSON.parse(response.body).map { |a| a["name"] }).to eq(["Parent Agency", "Renamed Agency"])
   end
 
-  it "keeps requested fields and JSONP callbacks separate from the cached default" do
+  it "does not let field-selected requests change the cached default" do
+    get '/api/v1/agencies.json', params: {fields: [""]}
+    get '/api/v1/agencies.json'
+    expect(JSON.parse(response.body).first.keys).to include("name", "slug", "logo", "json_url")
+  end
+
+  it "applies requested fields and JSONP callbacks" do
     get '/api/v1/agencies.json'
     get '/api/v1/agencies.json', params: {fields: ["slug"], callback: "cb"}
 
