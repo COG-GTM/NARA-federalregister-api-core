@@ -32,11 +32,15 @@ class ApiController < ApplicationController
   end
 
   def render_json_or_jsonp(data, options = {})
+    render_encoded_json_or_jsonp(ActiveSupport::JSON.encode(data), options)
+  end
+
+  def render_encoded_json_or_jsonp(json, options = {})
     callback = params[:callback].to_s
     if callback =~ /^[a-zA-Z0-9_\.]+$/
-      render({plain: "#{callback}(" + ActiveSupport::JSON.encode(data) + ")", content_type: "application/javascript"}.merge(options))
+      render({plain: "#{callback}(" + json + ")", content_type: "application/javascript"}.merge(options))
     else
-      render({:json => ActiveSupport::JSON.encode(data)}.merge(options))
+      render({:json => json}.merge(options))
     end
   end
 
