@@ -2,13 +2,17 @@ class Api::V1::AgenciesController < ApiController
   def index
     respond_to do |wants|
       wants.json do
-        agencies = Agency.includes(:children).order("name")
-        data = agencies.map do |agency|
-          basic_agency_data(agency).merge(:json_url => api_v1_agency_url(agency.id, :format => :json))
+        agencies = Agency.all
+        cache_key = ["api/v1/agencies", agencies.cache_key_with_version, request.base_url, specified_fields]
+        json = Rails.cache.fetch(cache_key, expires_in: 1.day) do
+          data = agencies.includes(:children).order("name").map do |agency|
+            basic_agency_data(agency).merge(:json_url => api_v1_agency_url(agency.id, :format => :json))
+          end
+          ActiveSupport::JSON.encode(data)
         end
 
         cache_for 1.day
-        render_json_or_jsonp data
+        render_encoded_json_or_jsonp json
       end
     end
   end
